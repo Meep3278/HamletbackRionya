@@ -4,6 +4,7 @@ import math
 import random
 from collections import defaultdict
 from simanneal import Annealer
+import sys
 
 def evaluate_ordering(ordering):
     eval_list = [1 for _ in range(N)]
@@ -22,7 +23,12 @@ class GiantAnnealer(Annealer):
         return -sum(evaluate_ordering(self.state))
 
 if __name__ == '__main__':
-    N = 4
+    N = sys.argv
+    try:
+        len(N) == 2
+    except ValueError:
+        print("Oops!  That was no valid number.  Try again...")
+    N = int(N[1])
     init_state = [(a, b) for a in range(N) for b in range(N) if a != b]
     random.shuffle(init_state)
     ga = GiantAnnealer(init_state)
