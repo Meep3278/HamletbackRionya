@@ -16,7 +16,7 @@ class GiantAnnealer(Annealer):
 
     def move(self):
         # choose a random entry in the matrix
-        i = random.randrange(len(self.state)-1)
+        i = random.randrange(1, len(self.state)-1)
         self.state[i], self.state[i+1] = self.state[i+1], self.state[i]
 
     def energy(self):
@@ -24,14 +24,13 @@ class GiantAnnealer(Annealer):
 
 if __name__ == '__main__':
     N = sys.argv
-    try:
-        len(N) == 2
-    except ValueError:
-        print("Oops!  That was no valid number.  Try again...")
+    if len(N) != 2:
+        raise ValueError("Oops!  That was the wrong input.  Try again...")
     N = int(N[1])
     init_state = [(a, b) for a in range(N) for b in range(N) if a != b]
     random.shuffle(init_state)
     ga = GiantAnnealer(init_state)
+    ga.steps = 50000
     order, total = ga.anneal()
     print(order)
     print(evaluate_ordering(order))
