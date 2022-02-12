@@ -8,8 +8,6 @@ import sys
 import numpy as np
 from numpy.linalg import multi_dot
 
-def evaluate_ordering(ordering):
-    return multi_dot(ordering)
 def to_slots(ordering, N_in):
     slots = []
     for array in ordering[1:]:
@@ -24,9 +22,7 @@ class GiantAnnealer(Annealer):
         self.state[i], self.state[i+1] = self.state[i+1], self.state[i]
 
     def energy(self):
-        # print("evaluating:")
-        # print(evaluate_ordering(self.state))
-        return -sum(evaluate_ordering(self.state))
+        return -sum(multi_dot(self.state))
 
 if __name__ == '__main__':
     N = sys.argv
@@ -41,6 +37,6 @@ if __name__ == '__main__':
     ga.steps = 100000
     order, total = ga.anneal()
     print(order)
-    print(evaluate_ordering(order))
+    print(multi_dot(order))
     print(to_slots(order, N))
     print("total=" + str(-total))
